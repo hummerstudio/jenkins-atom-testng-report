@@ -1,0 +1,107 @@
+{
+  "atomCode": "testng-report",
+  "name": "TestNG report",
+  "version": "1.0.0",
+  "description": "解析 TestNG 的 testng-results.xml，按 testng 插件的阈值规则给构建定级（UNSTABLE/FAILURE），并发布自包含 HTML 报告。",
+  "execution": {
+    "packagePath": "testng-report.jar",
+    "language": "java",
+    "target": "$atom_java_path -cp testng-report.jar com.jenkinschina.atom.sdk.AtomRunner"
+  },
+  "input": {
+    "reportFilenamePattern": {
+      "label": "TestNG XML（glob，可用 , ; 分隔多个）",
+      "type": "vuex-input",
+      "default": "**/testng-results.xml"
+    },
+    "label": {
+      "label": "报告名称",
+      "type": "vuex-input",
+      "default": "TestNG results"
+    },
+    "outputDir": {
+      "label": "生成的 HTML 放哪里",
+      "type": "vuex-input",
+      "default": "out/testng"
+    },
+    "thresholdMode": {
+      "label": "阈值模式（1=用例个数，2=百分比）",
+      "type": "vuex-input",
+      "default": "2"
+    },
+    "failedFails": {
+      "label": "失败用例数/百分比 超过多少判 FAILURE（默认 100）",
+      "type": "vuex-input",
+      "default": "100"
+    },
+    "failedSkips": {
+      "label": "跳过用例数/百分比 超过多少判 FAILURE（默认 100）",
+      "type": "vuex-input",
+      "default": "100"
+    },
+    "unstableFails": {
+      "label": "失败用例数/百分比 超过多少判 UNSTABLE（默认 0）",
+      "type": "vuex-input",
+      "default": "0"
+    },
+    "unstableSkips": {
+      "label": "跳过用例数/百分比 超过多少判 UNSTABLE（默认 100）",
+      "type": "vuex-input",
+      "default": "100"
+    },
+    "failureOnFailedTestConfig": {
+      "label": "配置方法（@Before/@After）失败即判 FAILURE",
+      "type": "checkbox",
+      "default": "false"
+    },
+    "failIfNoReports": {
+      "label": "没有匹配到报告时让步骤失败（插件本身是继续）",
+      "type": "checkbox",
+      "default": "false"
+    }
+  },
+  "output": {
+    "total": {
+      "type": "string",
+      "description": "用例总数（不含配置方法）"
+    },
+    "passed": {
+      "type": "string",
+      "description": "通过数"
+    },
+    "failed": {
+      "type": "string",
+      "description": "失败数"
+    },
+    "skipped": {
+      "type": "string",
+      "description": "跳过数"
+    },
+    "failedConfigMethods": {
+      "type": "string",
+      "description": "失败的配置方法数"
+    },
+    "skippedConfigMethods": {
+      "type": "string",
+      "description": "跳过的配置方法数"
+    },
+    "durationSeconds": {
+      "type": "string",
+      "description": "用例耗时合计（秒，非墙钟）"
+    },
+    "verdict": {
+      "type": "string",
+      "description": "NONE / UNSTABLE / FAILURE"
+    },
+    "report": {
+      "type": "report",
+      "description": "构建页内嵌的 HTML 报告"
+    }
+  },
+  "x-jenkins": {
+    "protocol": "jenkins-1",
+    "requires": {
+      "runner": ">=0.4.0"
+    }
+  }
+}

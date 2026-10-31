@@ -1,0 +1,11 @@
+{
+  "name": "TestNG report",
+  "summary": "把 testng 插件变成一个原子：解析 testng-results.xml、按同一套阈值判 UNSTABLE/FAILURE、发布 HTML 报告。",
+  "author": "hummerstudio",
+  "license": "MIT",
+  "tags": [
+    "official-port",
+    "testng"
+  ],
+  "homepage": "https://github.com/hummerstudio/jenkins-atom-testng-report"
+}
