@@ -1,7 +1,7 @@
 {
   "atomCode": "testng-report",
   "name": "TestNG report",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "解析 TestNG 的 testng-results.xml，按 testng 插件的阈值规则给构建定级（UNSTABLE/FAILURE），并发布自包含 HTML 报告。",
   "execution": {
     "packagePath": "testng-report.jar",
@@ -57,6 +57,11 @@
     "failIfNoReports": {
       "label": "没有匹配到报告时让步骤失败（插件本身是继续）",
       "type": "checkbox",
+      "default": "false"
+    },
+    "allowUnreadableReports": {
+      "label": "报告解析失败也继续（默认 false：解析失败即失败）",
+      "type": "boolean",
       "default": "false"
     }
   },

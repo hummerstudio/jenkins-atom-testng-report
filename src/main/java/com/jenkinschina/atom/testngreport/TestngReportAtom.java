@@ -60,6 +60,7 @@ public class TestngReportAtom implements AtomTask {
         int failedSkips = context.getIntParam("failedSkips", 100);
         int unstableFails = context.getIntParam("unstableFails", 0);
         int unstableSkips = context.getIntParam("unstableSkips", 100);
+        boolean allowUnreadable = "true".equalsIgnoreCase(context.getParam("allowUnreadableReports", "false"));
 
         Path workspace = context.getWorkspace();
         List<Path> files = Glob.find(workspace, patterns(pattern));
@@ -78,6 +79,15 @@ public class TestngReportAtom implements AtomTask {
             read(file, summary, context);
         }
         int total = summary.failed + summary.skipped + summary.passed;
+
+        if (summary.unreadable > 0 && !allowUnreadable) {
+            // the plugin logs a parse failure and keeps the build green; a gate that says "0 tests" while the
+            // report it was given never parsed is worse than a red build
+            return AtomResult.error(ErrorType.USER, 40003,
+                    summary.unreadable + " of " + files.size() + " report(s) could not be parsed: "
+                            + summary.firstParseError
+                            + " (set allowUnreadableReports=true to accept this)");
+        }
 
         if (total == 0 && summary.failedConfig == 0) {
             // "Found matching files but did not find any TestNG results." — again, no result change in the plugin
@@ -167,6 +177,9 @@ public class TestngReportAtom implements AtomTask {
             Element root = document.getDocumentElement();
             if (root == null) {
                 summary.unreadable++;
+                if (summary.firstParseError == null) {
+                    summary.firstParseError = file.getFileName() + ": empty document";
+                }
                 context.log("[testng] " + file + " is empty");
                 return;
             }
@@ -194,6 +207,9 @@ public class TestngReportAtom implements AtomTask {
         } catch (Exception e) {
             // the plugin logs the parse failure and keeps the build alive; the same here, but the file is counted
             summary.unreadable++;
+            if (summary.firstParseError == null) {
+                summary.firstParseError = file.getFileName() + ": " + e.getMessage();
+            }
             context.log("[testng] cannot parse " + file + ": " + e.getMessage());
         }
     }
@@ -453,6 +469,7 @@ public class TestngReportAtom implements AtomTask {
         int failedConfig;
         int skippedConfig;
         int unreadable;
+        String firstParseError;
         long millis;
         final List<Case> cases = new ArrayList<>();
 

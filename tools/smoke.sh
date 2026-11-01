@@ -157,13 +157,21 @@ cat >"$multi/b/y.xml" <<'XML'
 </testng-results>
 XML
 printf 'not xml at all\n' >"$multi/b/broken.xml"
-printf '{"reportFilenamePattern":"a/*.xml;b/*.xml","thresholdMode":"1","failedFails":"0","unstableSkips":"100"}' >"$multi/input.json"
+printf '{"reportFilenamePattern":"a/*.xml;b/*.xml","thresholdMode":"1","failedFails":"0","unstableSkips":"100","allowUnreadableReports":"true"}' >"$multi/input.json"
 run "$multi" >"$multi/log.txt" 2>&1 || fail "list-pattern run failed: $(cat "$multi/log.txt")"
 grep -q '"total":{"type":"string","value":"4"}' "$multi/output.json" \
   || fail "both patterns must be summed: $(cat "$multi/output.json")"
 grep -q '"verdict":{"type":"string","value":"NONE"}' "$multi/output.json" || fail "skips inside threshold must stay NONE"
 grep -qi 'cannot parse' "$multi/log.txt" || fail "an unreadable report must be reported, not swallowed"
 check "$multi" "$multi/a/x.xml" "$multi/b/y.xml"
+
+# the same inputs without the opt-in: a report that never parsed is not "0 tests and all good"
+printf '{"reportFilenamePattern":"a/*.xml;b/*.xml","thresholdMode":"1","failedFails":"0","unstableSkips":"100"}' >"$multi/input.json"
+set +e; run "$multi" >"$multi/strict.log" 2>&1; strict=$?; set -e
+[ "$strict" -ne 0 ] || fail "an unparseable report must fail the step unless allowUnreadableReports=true"
+grep -q '"errorCode":40003' "$multi/output.json" || fail "expected errorCode 40003: $(cat "$multi/output.json")"
+grep -q "broken.xml" "$multi/output.json" || fail "the failure must name the file: $(cat "$multi/output.json")"
+printf '{"reportFilenamePattern":"a/*.xml;b/*.xml","thresholdMode":"1","failedFails":"0","unstableSkips":"100","allowUnreadableReports":"true"}' >"$multi/input.json"
 
 # a matched file with no test methods must not fail the step (plugin: "did not find any TestNG results")
 empty="$(mktemp -d)"; mkdir -p "$empty/e"
@@ -187,4 +195,4 @@ set +e; run "$bad" >"$bad/log.txt" 2>&1; code=$?; set -e
 [ "$code" -ne 0 ] || fail "thresholdMode=3 must be rejected"
 grep -q '"errorCode":40002' "$bad/output.json" || fail "expected errorCode 40002: $(cat "$bad/output.json")"
 
-echo "smoke ok: defaults/threshold ordering/strict >/percentage/list patterns/unreadable/empty/missing/bad mode/report read-back"
+echo "smoke ok: defaults/threshold ordering/strict >/percentage/list patterns/unreadable report fails by default/opt-in keeps going/empty/missing/bad mode/report read-back"
