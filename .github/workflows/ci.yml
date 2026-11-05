@@ -27,5 +27,5 @@ jobs:
         run: ./tools/smoke.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: testng-report-atom
-          path: dist/testng-report/
+          name: testng-atom
+          path: dist/testng/

@@ -1,4 +1,4 @@
-# jenkins-atom-testng-report
+# jenkins-atom-testng
 
 The [testng](https://plugins.jenkins.io/testng-plugin/) plugin (about 5.9k installations) as an **atom**: read the
 `testng-results.xml` your build already produced, count the methods, and apply the plugin's own threshold rules.
@@ -28,7 +28,7 @@ recount for the same reason. Configuration methods (`is-config`) are counted apa
 ## Build and smoke test
 
 ```bash
-./build.sh          # -> dist/testng-report/{testng-report.jar,task.json}, SDK inside
+./build.sh          # -> dist/testng/{testng.jar,task.json}, SDK inside
 ./tools/smoke.sh    # 9 scenarios; tools/check.py recomputes the numbers independently and compares
 ```
 

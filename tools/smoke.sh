@@ -14,7 +14,7 @@ cd "$(dirname "$0")/.."
 
 export BUILD_NUMBER=7 JOB_NAME="$(basename "$PWD")-job"
 ./build.sh >/dev/null
-jar="$(cd dist/testng-report && pwd)/testng-report.jar"
+jar="$(cd dist/testng && pwd)/testng.jar"
 java_bin="${JAVA_HOME:+$JAVA_HOME/bin/}java"
 fail() { echo "smoke failed: $*" >&2; exit 1; }
 

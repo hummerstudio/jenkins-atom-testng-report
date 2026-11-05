@@ -1,4 +1,4 @@
-package com.jenkinschina.atom.testngreport;
+package com.jenkinschina.atom.testng;
 
 import com.jenkinschina.atom.sdk.AtomContext;
 import com.jenkinschina.atom.sdk.AtomResult;
@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
  * with per-class/per-package drill-down and a trend graph, which is a UI host this atom has no way to attach to. The
  * atom writes one self-contained HTML file instead, so the numbers and the failure stacks stay readable.
  */
-public class TestngReportAtom implements AtomTask {
+public class TestngAtom implements AtomTask {
 
     /** The plugin keeps the last 200 failures in its own report; a longer list is noise, not information. */
     private static final int MAX_CASES = 200;

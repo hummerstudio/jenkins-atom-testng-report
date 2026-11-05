@@ -35,9 +35,9 @@ mkdir -p "$classes/META-INF/services"
 cp src/main/resources/META-INF/services/* "$classes/META-INF/services/"
 ( cd "$sdk" && "$JAR" xf "$SDK_JAR" && rm -rf META-INF/MANIFEST.MF META-INF/services )
 
-rm -rf dist/testng-report
-mkdir -p dist/testng-report
-"$JAR" --create --file dist/testng-report/testng-report.jar -C "$classes" . -C "$sdk" .
-cp task.json dist/testng-report/
-[ -f meta.json ] && cp meta.json dist/testng-report/
-echo "built dist/testng-report: $(ls dist/testng-report | tr '\n' ' ')"
+rm -rf dist/testng
+mkdir -p dist/testng
+"$JAR" --create --file dist/testng/testng.jar -C "$classes" . -C "$sdk" .
+cp task.json dist/testng/
+[ -f meta.json ] && cp meta.json dist/testng/
+echo "built dist/testng: $(ls dist/testng | tr '\n' ' ')"

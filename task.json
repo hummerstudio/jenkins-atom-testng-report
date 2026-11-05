@@ -1,12 +1,12 @@
 {
-  "atomCode": "testng-report",
+  "atomCode": "testng",
   "name": "TestNG report",
   "version": "1.0.1",
   "description": "解析 TestNG 的 testng-results.xml，按 testng 插件的阈值规则给构建定级（UNSTABLE/FAILURE），并发布自包含 HTML 报告。",
   "execution": {
-    "packagePath": "testng-report.jar",
+    "packagePath": "testng.jar",
     "language": "java",
-    "target": "$atom_java_path -cp testng-report.jar com.jenkinschina.atom.sdk.AtomRunner"
+    "target": "$atom_java_path -cp testng.jar com.jenkinschina.atom.sdk.AtomRunner"
   },
   "input": {
     "reportFilenamePattern": {
