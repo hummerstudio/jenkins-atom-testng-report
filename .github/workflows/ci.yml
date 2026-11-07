@@ -37,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: testng-atom
-          path: atom/dist/testng/
+          path: atom/target/dist/testng/
