@@ -25,15 +25,14 @@ recount for the same reason. Configuration methods (`is-config`) are counted apa
 **What it does not do**: the build page's per-class/per-package drill-down and the trend graph
 (`TestNGTestResultBuildAction`). That is a UI host, not another atom.
 
-## Build and smoke test
+## Build and test
 
 ```bash
-./build.sh          # -> dist/testng/{testng.jar,task.json}, SDK inside
-./tools/smoke.sh    # 9 scenarios; tools/check.py recomputes the numbers independently and compares
+mvn verify          # -> dist/testng/{testng.jar,task.json}, SDK inside; 9 cases in TestngReportIT
 ```
 
-`tools/check.py` is a second implementation (Python + ElementTree) of the counting and threshold rules: the smoke
-writes fixtures, runs the atom through `AtomRunner`, then has the checker re-derive
-`total/passed/failed/skipped/verdict` from the same XML and compare them with `output.json`. Two mutations were run
-against it to prove the assertions bite: `>` to `>=` in the failed-fails comparison (caught by the at-threshold
-scenario) and `is-config` ignored (caught by the `total`/`failedConfigMethods` mismatch).
+`tools/check.py` stays as a second implementation (Python + ElementTree) of the counting and threshold rules;
+`TestngReportIT` writes the same fixtures, runs the atom through `AtomRunner` and asserts
+`total/passed/failed/skipped/verdict` directly. Two mutations were run against the rules to prove the assertions bite:
+`>` to `>=` in the failed-fails comparison (caught by the at-threshold scenario) and `is-config` ignored (caught by the
+`total`/`failedConfigMethods` mismatch).
